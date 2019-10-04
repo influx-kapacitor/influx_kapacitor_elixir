@@ -5,8 +5,8 @@ defmodule InfluxRecorder do
     GenServer.start_link(__MODULE__, :queue.new(), name: __MODULE__)
   end
 
-  def init(_queue) do
-    {:ok, :queue.new()}
+  def init(queue) do
+    {:ok, queue}
   end
 
   def record(measurement, key, value, timestamp \\ DateTime.utc_now()) do
@@ -24,8 +24,7 @@ defmodule InfluxRecorder do
     {:reply, queue, :queue.new()}
   end
 
-  def handle_cast({:record, measurement}, _queue) do
-    q = :queue.in(measurement, :queue.new())
-    {:noreply, q}
+  def handle_cast({:record, measurement}, queue) do
+    {:noreply, :queue.in(measurement, queue)}
   end
 end

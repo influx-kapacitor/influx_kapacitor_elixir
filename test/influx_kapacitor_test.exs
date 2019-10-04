@@ -16,6 +16,6 @@ defmodule InfluxKapacitorTest do
 
     InfluxRecorder.record("foo", "key", "value")
     :timer.sleep(100)
-    IO.inspect(InfluxRecorder.get_queue())
+    assert length(:queue.to_list(InfluxRecorder.get_queue())) == 1
   end
 end
